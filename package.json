@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "@zwa73/utils": "^1.0.60",
+    "cdda-event": "file:CDDA-Event",
+    "cdda-schema": "file:CDDA-Schema",
+    "commander": "^11.1.0",
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.3.3",
+    "typescript-json-schema": "^0.62.0"
+  },
+  "name": "cdda-custommedia",
+  "description": "CDDA-CustomMedia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "compile": "tsc && tsc-alias",
+    "build": "npm run compile && node --trace-warnings index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sosarciel-CDDA/CDDA-CustomMedia.git"
+  },
+  "keywords": [
+    "cdda"
+  ],
+  "author": "zwa73",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sosarciel-CDDA/CDDA-CustomMedia/issues"
+  },
+  "homepage": "https://github.com/Sosarciel-CDDA/CDDA-CustomMedia#readme"
+}
