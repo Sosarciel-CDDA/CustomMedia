@@ -1,6 +1,6 @@
 import { JArray } from "@zwa73/utils";
 import { AnimType } from "./AnimTool";
-import { CharDefineData, CDataManager } from "../DataManager";
+import { CharDefineData, DataManager } from "../DataManager";
 import * as path from 'path';
 import { Eoc } from "cdda-schema";
 import { CMDef } from "CMDefine";
