@@ -1,10 +1,11 @@
-import { CDataManager } from "../DataManager";
 import * as path from "path";
 import * as fs from "fs";
 import { UtilFT, UtilFunc } from "@zwa73/utils";
 import { AnimType } from "./AnimTool";
 import { OverlayOrdering, PkgTilesetInfo, TilesetCfg, ModTileset } from "cdda-schema";
-
+import { TARGET_GFXPACK, getAnimPath, getOutAnimPath } from "@src/CMDefine";
+import { DataManager } from "cdda-event";
+import { getAnimTypeMutID } from "./UtilGener";
 
 
 /**动作图片信息 */
@@ -29,11 +30,12 @@ type AnimeInfo = Partial<Record<AnimType,{
 
 
 /**合并并创建序列帧 */
-export async function mergeAnime(dm:CDataManager,charName:string,forcePackage:boolean=true){
-    const {defineData,outData} = await dm.getCharData(charName);
-    const imagePath = path.join(dm.getCharPath(charName),"anime");
-    if(!(await UtilFT.pathExists(imagePath))) return;
+export async function mergeAnime(dm:DataManager,charName:string,forcePackage:boolean=true){
+    const imagePath = getAnimPath(charName);
+    const validAnim:AnimType[] = [];
+    if(!(await UtilFT.pathExists(imagePath))) return validAnim;
 
+    //载入动作数据
     const info = await UtilFT.loadJSONFile(path.join(imagePath,'info')) as AnimeInfo;
 
     //缓存目录
@@ -59,23 +61,26 @@ export async function mergeAnime(dm:CDataManager,charName:string,forcePackage:bo
     //删除缓存
     if(forcePackage)
         await fs.promises.rm(tmpPath, { recursive: true, force: true });
+    /**待处理的缓存动画 */
     const rawPath = path.join(tmpPath,'raw');
+    /**合并完成的缓存动画 */
     const mergePath = path.join(tmpPath,'merge');
+
+    //遍历动作数据
     for(const mtnName in info){
         const animType = mtnName as AnimType;
         const mtnInfo = info[animType];
         //添加有效动画
-        defineData.validAnim.push(animType);
-        const animData = defineData.animData[animType];
+        validAnim.push(animType);
 
         if(mtnInfo==undefined) continue;
 
         const mtnPath = path.join(imagePath,mtnName);
-        const animName = animData.animName;
 
-
-        //创建缓存文件夹
-        const tmpMthPath = path.join(rawPath,`pngs_${animName}_${mtnInfo.sprite_width}x${mtnInfo.sprite_height}`)
+        //在缓存构建py脚本所需的特殊文件夹名
+        const wxh = `${mtnInfo.sprite_width}x${mtnInfo.sprite_height}`;
+        const uid = (charName+animType).replaceAll("_","");
+        const tmpMthPath = path.join(rawPath, `pngs_${uid}_${wxh}`);
         await UtilFT.ensurePathExists(tmpMthPath,true);
 
         //复制数据到缓存
@@ -99,21 +104,21 @@ export async function mergeAnime(dm:CDataManager,charName:string,forcePackage:bo
         if(animages.length>0 && last_weight!=null && last_weight>0)
             animages[animages.length-1].weight = last_weight;
         //写入动画数据
-        await UtilFT.writeJSONFile(path.join(tmpMthPath,animName),{
+        await UtilFT.writeJSONFile(path.join(tmpMthPath,uid),{
             //id:`overlay_worn_${animData.armorID}`,
-            id:`overlay_mutation_${animData.mutID}`,
+            id:`overlay_mutation_${getAnimTypeMutID(charName,animType)}`,
             fg:animages,
             animated: true,
         });
         //添加主info
         tmpRawInfo.push({
-            [animName+'.png']:{
+            [uid+'.png']:{
                 ...rest
             }
         });
         //添加显示层级
         ordering.overlay_ordering.push({
-            id : [animData.mutID],
+            id : [getAnimTypeMutID(charName,animType)],
             order : 9999
         })
     }
@@ -132,20 +137,20 @@ export async function mergeAnime(dm:CDataManager,charName:string,forcePackage:bo
         await UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
 
     //写入 mod贴图设置 到角色文件夹
-    const charAnimPath = path.join(dm.getOutCharPath(charName),'anime');
+    const charAnimPath = getOutAnimPath(charName);
     await UtilFT.ensurePathExists(charAnimPath,true);
     const tilesetNew = ((await UtilFT.loadJSONFile(packageInfoPath))["tiles-new"] as TilesetCfg[])
         .filter(item => item.file!="fallback.png");
     const animModTileset:ModTileset = {
         type: "mod_tileset",
-        compatibility: [dm.gameData.gfx_name!],
+        compatibility: [TARGET_GFXPACK],
         "tiles-new": tilesetNew.map(item=>{
             item.file = path.join('chars',charName,'anime',item.file)
             return item;
         }),
     }
-    outData["anime_tileset"] = [animModTileset];
-    outData['anime_overlay_ordering'] = [ordering];
+    dm.addStaticData([animModTileset,ordering], path.join(getOutAnimPath(charName),"anime_tileset"))
+
     //复制所有图片 到主目录
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName=> path.parse(fileName).ext=='.png');
@@ -154,4 +159,5 @@ export async function mergeAnime(dm:CDataManager,charName:string,forcePackage:bo
         const outPngPath = path.join(charAnimPath,pngName);
         await fs.promises.copyFile(pngPath,outPngPath);
     }
+    return validAnim;
 }

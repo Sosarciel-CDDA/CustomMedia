@@ -1,10 +1,10 @@
-import { CDataManager } from "@src/DataManager";
 import * as path from "path";
 import * as fs from "fs";
 import { UtilFT, UtilFunc } from "@zwa73/utils";
-import { PkgImageCfg, OverlayOrdering, PkgSpriteCfg, PkgTilesetCfg, PkgTilesetInfo, TilesetCfg } from "cdda-schema";
+import { PkgImageCfg, PkgSpriteCfg, PkgTilesetCfg, PkgTilesetInfo, TilesetCfg } from "cdda-schema";
 import { ModTileset } from "cdda-schema";
-
+import { DataManager } from "cdda-event";
+import { TARGET_GFXPACK, getAnimPath, getOutImagePath } from "@src/CMDefine";
 
 
 
@@ -16,11 +16,11 @@ type ImageInfo = {
     tileset:PkgTilesetCfg;
 };
 
-//根据 PkgSpriteCfg 获得图片列表
+/**根据 PkgSpriteCfg 获得图片列表 */
 function getImageFiles(cfg:PkgSpriteCfg):string[]{
     let subget = (imageCfg?:PkgImageCfg)=>{
         if(imageCfg===undefined) return [];
-        let imageNames: string[] = [];
+        const imageNames: string[] = [];
 
         if (typeof imageCfg === 'string')
             imageNames.push(imageCfg);
@@ -45,7 +45,7 @@ function getImageFiles(cfg:PkgSpriteCfg):string[]{
     }
     return [...subget(cfg.fg),...subget(cfg.bg)];
 }
-//根据 PkgSpriteCfg 获得图集名
+/** 根据 PkgSpriteCfg 获得图集uid */
 function getTilesetUID(cfg:PkgTilesetCfg):string{
     let W = cfg.sprite_width;
     let H = cfg.sprite_height;
@@ -66,56 +66,59 @@ function getTilesetUID(cfg:PkgTilesetCfg):string{
 }
 
 
-/**合并图像 */
-export async function mergeImage(dm:CDataManager,charName:string,forcePackage:boolean=true){
-    const {defineData,outData} = await dm.getCharData(charName);
-    const imagePath = path.join(dm.getCharPath(charName),"image");
+/**使用py工具合并图像 输出为modtileset */
+export async function mergeImage(dm:DataManager,charName:string,forcePackage:boolean=true){
+    /**动画主目录 */
+    const imagePath = getAnimPath(charName);
     if(!(await UtilFT.pathExists(imagePath))) return;
-
+    /**处理缓存目录 */
     const tmpPath = path.join(imagePath,"tmp");
+    /**未处理的图片目录 */
     const rawPath = path.join(tmpPath,"raw");
+    /**打包后的图片输出目录 */
     const mergePath = path.join(tmpPath,"merge");
-
+    /**用于输出的图集表 */
     const tileSetMap:Record<string,PkgTilesetCfg> = {};
 
     //寻找图像配置
-    const cfgFilepaths = Object.values(UtilFT.fileSearchRegex(imagePath,/image\/[^/]+\.json/.source));
+    const cfgFilepaths = UtilFT.fileSearchGlob(path.join(imagePath,"*.json").replace("\\","/"));
     for(const cfgPath of cfgFilepaths){
         const cfgJson:ImageInfo = (await UtilFT.loadJSONFile(cfgPath)) as ImageInfo;
         const tilesetcfg = cfgJson.tileset;
-        //console.log("startlog")
-        //console.log(cfgPath)
-        //console.log(cfgJson)
+        //获取配置关联的所有图片
         const pngs = getImageFiles(cfgJson.sprite);
-        //移动到缓存
+
+        //在缓存构建py脚本所需的特殊文件夹名
         const wxh = tilesetcfg.sprite_width+"x"+tilesetcfg.sprite_height;
         const uid = getTilesetUID(tilesetcfg);
         const tmpFolderPath = path.join(rawPath,`pngs_${uid}_${wxh}`);
+
         await UtilFT.ensurePathExists(tmpFolderPath,true);
-        //复制png
+        //复制png到缓存
         for(let pngName of pngs){
             pngName = pngName+".png";
             const pngPath = path.join(imagePath,pngName);
             const outPngPath = path.join(tmpFolderPath,pngName);
             await fs.promises.copyFile(pngPath,outPngPath);
         }
+
         //复制配置
-        const cfgName = path.parse(cfgPath);
-        await UtilFT.writeJSONFile(path.join(tmpFolderPath,cfgName.name),cfgJson.sprite);
+        const cfgName = path.parse(cfgPath).name;
+        await UtilFT.writeJSONFile(path.join(tmpFolderPath,cfgName),cfgJson.sprite);
+
         //注册入tileset表
         tileSetMap[uid] = tilesetcfg;
     }
+
     //创建tileset配置
     const rawinfo:PkgTilesetInfo=[{
             width:32,
             height:32,
             pixelscale:1
         },
-        ...Object.keys(tileSetMap).map((uid)=>{
-            return {
-                [`${uid}.png`]:tileSetMap[uid]
-            }
-        })
+        ...Object.keys(tileSetMap).map((uid)=>({
+            [`${uid}.png`]:tileSetMap[uid]
+        }))
     ]
     await UtilFT.writeJSONFile(path.join(rawPath,'tile_info.json'),rawinfo);
     const str = `NAME: ${charName}\n`     +
@@ -129,20 +132,21 @@ export async function mergeImage(dm:CDataManager,charName:string,forcePackage:bo
 
     //读取打包结果
     const packageInfoPath = path.join(mergePath,'tile_config.json');
-    const charImgPath = path.join(dm.getOutCharPath(charName),'image');
-    await UtilFT.ensurePathExists(charImgPath,true);
     const tilesetNew = ((await UtilFT.loadJSONFile(packageInfoPath))["tiles-new"] as TilesetCfg[])
         .filter(item => item.file!="fallback.png");
     const imgModTileset:ModTileset = {
         type: "mod_tileset",
-        compatibility: [dm.gameData.gfx_name!],
+        compatibility: [TARGET_GFXPACK],
         "tiles-new": tilesetNew.map(item=>{
             item.file = path.join('chars',charName,'image',item.file)
             return item;
         }),
     }
-    outData["image_tileset"] = [imgModTileset];
-    //复制所有图片 到主目录
+    dm.addStaticData([imgModTileset],path.join(getOutImagePath(charName),"image_tileset"))
+
+    //复制所有图片 到输出目录
+    const charImgPath = getOutImagePath(charName);
+    await UtilFT.ensurePathExists(charImgPath,true);
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName=> path.parse(fileName).ext=='.png');
     for(let pngName of pngs){
