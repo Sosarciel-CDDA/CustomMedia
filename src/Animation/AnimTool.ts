@@ -1,9 +1,10 @@
 import * as path from 'path';
-import { Armor, BodyPartList, Mutation, ItemGroup } from "cdda-schema";
+import { Armor, BodyPartList, Mutation, ItemGroup, MutFlag } from "cdda-schema";
 import { DataManager } from 'cdda-event';
 import { getAnimMainMutID, getAnimTypeMutID } from './UtilGener';
 import { JObject } from '@zwa73/utils';
-import { getOutAnimPath } from '@src/CMDefine';
+import { getOutAnimPath, getOutAnimPathAbs } from '@src/CMDefine';
+import { animeFlag } from '.';
 
 
 
@@ -24,6 +25,7 @@ export function formatAnimName(charName:string,animType:AnimType){
  * @param charName 角色名  
  */
 export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:AnimType[]){
+    if(vaildAnim.length<=0) return;
     const out:JObject[] = [];
     //动画变异标志
     const charAnimMut:Mutation={
@@ -37,6 +39,7 @@ export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:An
         purifiable:false,
         valid:false,
         player_display:false,
+        flags:[animeFlag.id as MutFlag]
     }
     out.push(charAnimMut);
 
@@ -57,5 +60,5 @@ export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:An
         }
         out.push(animMut);
     }
-    dm.addStaticData(out,path.join(getOutAnimPath("anime_tool")));
+    dm.addStaticData(out,path.join(getOutAnimPath(charName),"anime_tool"));
 }

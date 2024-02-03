@@ -4,7 +4,7 @@ import { UtilFT, UtilFunc } from "@zwa73/utils";
 import { PkgImageCfg, PkgSpriteCfg, PkgTilesetCfg, PkgTilesetInfo, TilesetCfg } from "cdda-schema";
 import { ModTileset } from "cdda-schema";
 import { DataManager } from "cdda-event";
-import { TARGET_GFXPACK, getAnimPath, getOutImagePath } from "@src/CMDefine";
+import { TARGET_GFXPACK, getAnimPath, getGfxPackName, getImagePath, getOutImagePath, getOutImagePathAbs } from "@src/CMDefine";
 
 
 
@@ -69,8 +69,9 @@ function getTilesetUID(cfg:PkgTilesetCfg):string{
 /**使用py工具合并图像 输出为modtileset */
 export async function mergeImage(dm:DataManager,charName:string,forcePackage:boolean=true){
     /**动画主目录 */
-    const imagePath = getAnimPath(charName);
+    const imagePath = getImagePath(charName);
     if(!(await UtilFT.pathExists(imagePath))) return;
+
     /**处理缓存目录 */
     const tmpPath = path.join(imagePath,"tmp");
     /**未处理的图片目录 */
@@ -136,16 +137,17 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
         .filter(item => item.file!="fallback.png");
     const imgModTileset:ModTileset = {
         type: "mod_tileset",
-        compatibility: [TARGET_GFXPACK],
+        compatibility: [await getGfxPackName()],
         "tiles-new": tilesetNew.map(item=>{
-            item.file = path.join('chars',charName,'image',item.file)
+            item.file = path.join(getImagePath(charName),item.file)
             return item;
         }),
     }
+
     dm.addStaticData([imgModTileset],path.join(getOutImagePath(charName),"image_tileset"))
 
     //复制所有图片 到输出目录
-    const charImgPath = getOutImagePath(charName);
+    const charImgPath = getOutImagePathAbs(charName);
     await UtilFT.ensurePathExists(charImgPath,true);
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName=> path.parse(fileName).ext=='.png');

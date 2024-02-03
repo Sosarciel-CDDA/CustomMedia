@@ -3,9 +3,16 @@ import { AnimType } from "./AnimTool";
 import { DataManager, CharHook } from "cdda-event";
 import * as path from 'path';
 import { Eoc } from "cdda-schema";
-import { CMDef, getOutAnimPath } from "@src/CMDefine";
+import { CMDef, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
 import { getAnimHook, getAnimMainMutID, getAnimTypeMutID } from "./UtilGener";
 
+
+const animEventMap:Record<AnimType,CharHook|undefined>={
+    Move    :"MoveStatus",
+    Attack  :"TryAttack",
+    Idle    :"IdleStatus",
+    //Death:"Death",
+} as const;
 
 /**移除其他动作变异 */
 function removeOtherAnimEoc(charName:string,animType:AnimType,vaildAnim:AnimType[]){
@@ -23,7 +30,9 @@ function removeOtherAnimEoc(charName:string,animType:AnimType,vaildAnim:AnimType
     }
     return eoc;
 }
-/**切换动作EOC */
+/**切换动作EOC  
+ * (...)=> [切换动作,删除其余动作]
+ */
 function changeAnimEoc(charName:string,animType:AnimType,vaildAnim:AnimType[]){
     const removeEoc = removeOtherAnimEoc(charName,animType,vaildAnim);
     if(removeEoc==null) return [];
@@ -45,13 +54,8 @@ function changeAnimEoc(charName:string,animType:AnimType,vaildAnim:AnimType[]){
 
 /**创建动画状态机事件 */
 export async function createAnimStatus(dm:DataManager,charName:string,vaildAnim:AnimType[]){
+    if(vaildAnim.length<=0) return;
     const eocList:Eoc[] = [];
-    const animEventMap:Record<AnimType,CharHook|undefined>={
-        Move    :"MoveStatus",
-        Attack  :"TryAttack",
-        Idle    :"IdleStatus",
-        //Death:"Death",
-    } as const;
     //添加切换动画
     for(const mtnName in animEventMap){
         const animType = mtnName as AnimType;

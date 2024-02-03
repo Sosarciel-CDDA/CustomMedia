@@ -1,0 +1,327 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"AnimType": {
+			"enum": [
+				"Attack",
+				"Idle",
+				"Move"
+			],
+			"type": "string"
+		},
+		"AnimeInfo": {
+			"description": "动作图片信息",
+			"properties": {
+				"Attack": {
+					"properties": {
+						"format_regex": {
+							"description": "帧动画文件名的格式正则 顺序数字应位于捕获组1 如 Idle_(.*)\\.png  默认为 Idle(.*)\\.png",
+							"type": "string"
+						},
+						"interval": {
+							"description": "帧动画间隔 默认10 Cdda为60帧",
+							"type": "number"
+						},
+						"last_weight": {
+							"description": "最后一帧的权重 默认等于interval",
+							"type": "number"
+						},
+						"pixelscale": {
+							"description": "图片缩放比例",
+							"type": "number"
+						},
+						"sprite_height": {
+							"description": "图片高度",
+							"type": "number"
+						},
+						"sprite_offset_x": {
+							"description": "图片偏移 X",
+							"type": "number"
+						},
+						"sprite_offset_y": {
+							"description": "图片偏移 Y",
+							"type": "number"
+						},
+						"sprite_width": {
+							"description": "图片宽度",
+							"type": "number"
+						}
+					},
+					"required": [
+						"sprite_height",
+						"sprite_width"
+					],
+					"type": "object"
+				},
+				"Idle": {
+					"properties": {
+						"format_regex": {
+							"description": "帧动画文件名的格式正则 顺序数字应位于捕获组1 如 Idle_(.*)\\.png  默认为 Idle(.*)\\.png",
+							"type": "string"
+						},
+						"interval": {
+							"description": "帧动画间隔 默认10 Cdda为60帧",
+							"type": "number"
+						},
+						"last_weight": {
+							"description": "最后一帧的权重 默认等于interval",
+							"type": "number"
+						},
+						"pixelscale": {
+							"description": "图片缩放比例",
+							"type": "number"
+						},
+						"sprite_height": {
+							"description": "图片高度",
+							"type": "number"
+						},
+						"sprite_offset_x": {
+							"description": "图片偏移 X",
+							"type": "number"
+						},
+						"sprite_offset_y": {
+							"description": "图片偏移 Y",
+							"type": "number"
+						},
+						"sprite_width": {
+							"description": "图片宽度",
+							"type": "number"
+						}
+					},
+					"required": [
+						"sprite_height",
+						"sprite_width"
+					],
+					"type": "object"
+				},
+				"Move": {
+					"properties": {
+						"format_regex": {
+							"description": "帧动画文件名的格式正则 顺序数字应位于捕获组1 如 Idle_(.*)\\.png  默认为 Idle(.*)\\.png",
+							"type": "string"
+						},
+						"interval": {
+							"description": "帧动画间隔 默认10 Cdda为60帧",
+							"type": "number"
+						},
+						"last_weight": {
+							"description": "最后一帧的权重 默认等于interval",
+							"type": "number"
+						},
+						"pixelscale": {
+							"description": "图片缩放比例",
+							"type": "number"
+						},
+						"sprite_height": {
+							"description": "图片高度",
+							"type": "number"
+						},
+						"sprite_offset_x": {
+							"description": "图片偏移 X",
+							"type": "number"
+						},
+						"sprite_offset_y": {
+							"description": "图片偏移 Y",
+							"type": "number"
+						},
+						"sprite_width": {
+							"description": "图片宽度",
+							"type": "number"
+						}
+					},
+					"required": [
+						"sprite_height",
+						"sprite_width"
+					],
+					"type": "object"
+				}
+			},
+			"type": "object"
+		},
+		"ImageInfo": {
+			"description": "图片信息",
+			"properties": {
+				"sprite": {
+					"$ref": "#/definitions/PkgSpriteCfg",
+					"description": "图片设定"
+				},
+				"tileset": {
+					"$ref": "#/definitions/PkgTilesetCfg",
+					"description": "图集设定"
+				}
+			},
+			"required": [
+				"sprite",
+				"tileset"
+			],
+			"type": "object"
+		},
+		"PkgImageCfg": {
+			"anyOf": [
+				{
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				{
+					"$ref": "#/definitions/PkgImageCfgObj",
+					"description": "未打包的图片对象格式"
+				},
+				{
+					"items": {
+						"$ref": "#/definitions/__type",
+						"description": "未打包的图片对象格式"
+					},
+					"type": "array"
+				},
+				{
+					"type": "string"
+				}
+			],
+			"description": "未打包的图片格式"
+		},
+		"PkgImageCfgObj": {
+			"$ref": "#/definitions/__type"
+		},
+		"PkgImageCfg_1": {
+			"anyOf": [
+				{
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				{
+					"$ref": "#/definitions/PkgImageCfgObj",
+					"description": "未打包的图片对象格式"
+				},
+				{
+					"items": {
+						"$ref": "#/definitions/PkgImageCfgObj",
+						"description": "未打包的图片对象格式"
+					},
+					"type": "array"
+				},
+				{
+					"type": "string"
+				}
+			],
+			"description": "未打包的图片格式"
+		},
+		"PkgSpriteCfg": {
+			"allOf": [
+				{
+					"properties": {
+						"bg": {
+							"$ref": "#/definitions/PkgImageCfg_1",
+							"description": "背景"
+						},
+						"fg": {
+							"$ref": "#/definitions/PkgImageCfg",
+							"description": "前景"
+						}
+					},
+					"required": [
+						"fg"
+					],
+					"type": "object"
+				},
+				{
+					"description": "通用sprite配置",
+					"properties": {
+						"animated": {
+							"description": "是动画 以weight为随机权重, 在随机起始位置循环播放Image\nweight为对应图片停留帧数\n游戏默认60帧",
+							"type": "boolean"
+						},
+						"id": {
+							"description": "用于载入游戏的id",
+							"type": "string"
+						},
+						"rotates": {
+							"description": "在游戏中随朝向旋转瓦块",
+							"type": "boolean"
+						}
+					},
+					"required": [
+						"id"
+					],
+					"type": "object"
+				}
+			],
+			"description": "用于描述待打包的Tileset 单个png 的格式"
+		},
+		"PkgTilesetCfg": {
+			"allOf": [
+				{
+					"properties": {
+						"sprites_across": {
+							"description": "打包瓦块时, 每一横排的瓦块数",
+							"type": "number"
+						}
+					},
+					"type": "object"
+				},
+				{
+					"description": "通用tileset配置",
+					"properties": {
+						"pixelscale": {
+							"description": "瓦块缩放率",
+							"type": "number"
+						},
+						"sprite_height": {
+							"description": "每个瓦块的高度",
+							"type": "number"
+						},
+						"sprite_offset_x": {
+							"description": "瓦块的x轴偏移",
+							"type": "number"
+						},
+						"sprite_offset_y": {
+							"description": "瓦块的y轴偏移",
+							"type": "number"
+						},
+						"sprite_width": {
+							"description": "每个瓦块的宽度",
+							"type": "number"
+						}
+					},
+					"required": [
+						"sprite_height",
+						"sprite_width"
+					],
+					"type": "object"
+				}
+			],
+			"description": "用于描述待打包的Tileset png合集 的格式"
+		},
+		"__type": {
+			"description": "未打包的图片对象格式",
+			"properties": {
+				"sprite": {
+					"anyOf": [
+						{
+							"items": {
+								"type": "string"
+							},
+							"type": "array"
+						},
+						{
+							"type": "string"
+						}
+					],
+					"description": "图片"
+				},
+				"weight": {
+					"description": "图片权重",
+					"type": "number"
+				}
+			},
+			"required": [
+				"sprite",
+				"weight"
+			],
+			"type": "object"
+		}
+	}
+}

@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { UtilFT, UtilFunc } from "@zwa73/utils";
 import { AnimType } from "./AnimTool";
 import { OverlayOrdering, PkgTilesetInfo, TilesetCfg, ModTileset } from "cdda-schema";
-import { TARGET_GFXPACK, getAnimPath, getOutAnimPath } from "@src/CMDefine";
+import { TARGET_GFXPACK, getAnimPath, getGfxPackName, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
 import { DataManager } from "cdda-event";
 import { getAnimTypeMutID } from "./UtilGener";
 
@@ -137,15 +137,15 @@ export async function mergeAnime(dm:DataManager,charName:string,forcePackage:boo
         await UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
 
     //写入 mod贴图设置 到角色文件夹
-    const charAnimPath = getOutAnimPath(charName);
+    const charAnimPath = getOutAnimPathAbs(charName);
     await UtilFT.ensurePathExists(charAnimPath,true);
     const tilesetNew = ((await UtilFT.loadJSONFile(packageInfoPath))["tiles-new"] as TilesetCfg[])
         .filter(item => item.file!="fallback.png");
     const animModTileset:ModTileset = {
         type: "mod_tileset",
-        compatibility: [TARGET_GFXPACK],
+        compatibility: [await getGfxPackName()],
         "tiles-new": tilesetNew.map(item=>{
-            item.file = path.join('chars',charName,'anime',item.file)
+            item.file = path.join(getAnimPath(charName),item.file)
             return item;
         }),
     }

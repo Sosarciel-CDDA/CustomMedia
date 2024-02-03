@@ -1,0 +1,12 @@
+[
+    {
+        "type": "MOD_INFO",
+        "id": "cmedia",
+        "name": "CustomMedia",
+        "authors": ["zwa73"],
+        "maintainers": ["zwa73"],
+        "description": "CustomMedia",
+        "category": "other",
+        "dependencies": ["dda"]
+    }
+]
