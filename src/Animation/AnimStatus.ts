@@ -4,7 +4,7 @@ import { DataManager, CharHook } from "cdda-event";
 import * as path from 'path';
 import { Eoc } from "cdda-schema";
 import { CMDef, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
-import { getAnimHook, getAnimMainMutID, getAnimTypeMutID } from "./UtilGener";
+import { getAnimMainMutID, getAnimTypeMutID } from "./UtilGener";
 
 
 const animEventMap:Record<AnimType,CharHook|undefined>={

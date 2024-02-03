@@ -106,12 +106,26 @@ exports.animeFlag = {
     type: "json_flag",
 };
 function initAnimEvent(dm) {
-    const out = [exports.animeFlag];
     const e = CMDefine_1.CMDef.genActEoc("InitAnime", [{
             if: { and: [{ not: { u_has_flag: exports.animeFlag.id } }, { not: { u_has_trait: exports.BaseBodyMutId } }] },
             then: [{ u_add_trait: exports.BaseBodyMutId }]
         }]);
-    out.push(e);
+    const BaseBodyOrdering = {
+        type: "overlay_order",
+        overlay_ordering: [
+            { id: [CMDefine_1.CMDef.genMutationID("BaseBody")], order: 0 }
+        ]
+    };
+    const CnpcBaseBody = {
+        type: "mutation",
+        id: exports.BaseBodyMutId,
+        name: "自定义NPC替代素体",
+        description: "代替原素体的贴图变异",
+        purifiable: false,
+        valid: false,
+        player_display: false,
+        points: 0,
+    };
     dm.addInvokeEoc("Init", 0, e);
-    dm.addStaticData(out, "anime_flag");
+    dm.addStaticData([exports.animeFlag, e, BaseBodyOrdering, CnpcBaseBody], "anime_base");
 }

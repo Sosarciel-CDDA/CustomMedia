@@ -1,6 +1,6 @@
 import { DataManager } from "cdda-event";
 import { BodyPartList, Flag, FlagID, Mutation, MutationID, OverlayOrdering } from "cdda-schema";
-import { getAnimHook, getAnimMainMutID } from "./UtilGener";
+import { getAnimMainMutID } from "./UtilGener";
 import { mergeAnime } from "./MergeAnime";
 import { createAnimTool } from "./AnimTool";
 import { createAnimStatus } from "./AnimStatus";
