@@ -1,5 +1,5 @@
 import { DataManager } from "cdda-event";
-import { BodyPartList, Flag, FlagID, Mutation, MutationID } from "cdda-schema";
+import { BodyPartList, Flag, FlagID, Mutation, MutationID, OverlayOrdering } from "cdda-schema";
 import { getAnimHook, getAnimMainMutID } from "./UtilGener";
 import { mergeAnime } from "./MergeAnime";
 import { createAnimTool } from "./AnimTool";
@@ -113,12 +113,26 @@ export const animeFlag:Flag={
 }
 
 function initAnimEvent(dm:DataManager){
-    const out:JObject[]=[animeFlag];
     const e = CMDef.genActEoc("InitAnime",[{
         if:{and:[{not:{u_has_flag:animeFlag.id}},{not:{u_has_trait:BaseBodyMutId}}]},
         then:[{u_add_trait:BaseBodyMutId}]
     }])
-    out.push(e);
+    const BaseBodyOrdering:OverlayOrdering={
+        type:"overlay_order",
+        overlay_ordering:[
+            {id:[CMDef.genMutationID("BaseBody")],order:0}
+        ]
+    }
+    const CnpcBaseBody:Mutation={
+        type:"mutation",
+        id:BaseBodyMutId,
+        name:"自定义NPC替代素体",
+        description:"代替原素体的贴图变异",
+        purifiable:false,
+        valid:false,
+        player_display:false,
+        points:0,
+    }
     dm.addInvokeEoc("Init",0,e);
-    dm.addStaticData(out,"anime_flag");
+    dm.addStaticData([animeFlag,e,BaseBodyOrdering,CnpcBaseBody],"anime_base");
 }
