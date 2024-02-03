@@ -5,6 +5,7 @@ const path = require("path");
 const cdda_schema_1 = require("cdda-schema");
 const UtilGener_1 = require("./UtilGener");
 const CMDefine_1 = require("../CMDefine");
+const _1 = require(".");
 /**可用的动画类型列表 */
 exports.AnimTypeList = ["Idle", "Move", "Attack"];
 /**生成某角色的动作id */
@@ -31,6 +32,7 @@ async function createAnimTool(dm, charName, vaildAnim) {
         purifiable: false,
         valid: false,
         player_display: false,
+        flags: [_1.animeFlag.id]
     };
     out.push(charAnimMut);
     //动画变异

@@ -118,7 +118,7 @@ async function mergeImage(dm, charName, forcePackage = true) {
         type: "mod_tileset",
         compatibility: [await (0, CMDefine_1.getGfxPackName)()],
         "tiles-new": tilesetNew.map(item => {
-            item.file = path.join((0, CMDefine_1.getImagePath)(charName), item.file);
+            item.file = path.join((0, CMDefine_1.getOutImagePath)(charName), item.file);
             return item;
         }),
     };

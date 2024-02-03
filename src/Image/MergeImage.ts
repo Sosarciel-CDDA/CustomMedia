@@ -139,7 +139,7 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
         type: "mod_tileset",
         compatibility: [await getGfxPackName()],
         "tiles-new": tilesetNew.map(item=>{
-            item.file = path.join(getImagePath(charName),item.file)
+            item.file = path.join(getOutImagePath(charName),item.file)
             return item;
         }),
     }

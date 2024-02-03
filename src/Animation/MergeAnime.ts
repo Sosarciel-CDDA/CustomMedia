@@ -145,7 +145,7 @@ export async function mergeAnime(dm:DataManager,charName:string,forcePackage:boo
         type: "mod_tileset",
         compatibility: [await getGfxPackName()],
         "tiles-new": tilesetNew.map(item=>{
-            item.file = path.join(getAnimPath(charName),item.file)
+            item.file = path.join(getOutAnimPath(charName),item.file)
             return item;
         }),
     }

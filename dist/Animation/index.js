@@ -108,9 +108,10 @@ exports.animeFlag = {
 function initAnimEvent(dm) {
     const out = [exports.animeFlag];
     const e = CMDefine_1.CMDef.genActEoc("InitAnime", [{
-            if: { and: [{ u_has_flag: exports.animeFlag.id }, { not: { u_has_trait: exports.BaseBodyMutId } }] },
+            if: { and: [{ not: { u_has_flag: exports.animeFlag.id } }, { not: { u_has_trait: exports.BaseBodyMutId } }] },
             then: [{ u_add_trait: exports.BaseBodyMutId }]
         }]);
+    out.push(e);
     dm.addInvokeEoc("Init", 0, e);
     dm.addStaticData(out, "anime_flag");
 }
