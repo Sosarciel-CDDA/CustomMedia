@@ -4,6 +4,7 @@ exports.createAnimStatus = void 0;
 const path = require("path");
 const CMDefine_1 = require("../CMDefine");
 const UtilGener_1 = require("./UtilGener");
+const Export_1 = require("../Export");
 const animEventMap = {
     Move: "MoveStatus",
     Attack: "TryAttack",
@@ -43,7 +44,7 @@ function changeAnimEoc(charName, animType, vaildAnim) {
             { u_add_trait: (0, UtilGener_1.getAnimTypeMutID)(charName, animType) },
         ],
         condition: { and: [
-                { u_has_trait: (0, UtilGener_1.getAnimMainMutID)(charName) },
+                { u_has_trait: (0, Export_1.getAnimeMutID)(charName) },
                 { not: { u_has_trait: (0, UtilGener_1.getAnimTypeMutID)(charName, animType) } }
             ] }
     };

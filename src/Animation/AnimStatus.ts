@@ -4,7 +4,8 @@ import { DataManager, CharHook } from "cdda-event";
 import * as path from 'path';
 import { Eoc } from "cdda-schema";
 import { CMDef, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
-import { getAnimMainMutID, getAnimTypeMutID } from "./UtilGener";
+import { getAnimTypeMutID } from "./UtilGener";
+import { getAnimeMutID } from "@src/Export";
 
 
 const animEventMap:Record<AnimType,CharHook|undefined>={
@@ -45,7 +46,7 @@ function changeAnimEoc(charName:string,animType:AnimType,vaildAnim:AnimType[]){
             {u_add_trait: getAnimTypeMutID(charName,animType) },
         ],
         condition:{and:[
-            {u_has_trait: getAnimMainMutID(charName)},
+            {u_has_trait: getAnimeMutID(charName)},
             {not:{u_has_trait: getAnimTypeMutID(charName,animType)}}
         ]}
     }

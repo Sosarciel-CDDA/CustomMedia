@@ -1,10 +1,11 @@
 import * as path from 'path';
 import { Armor, BodyPartList, Mutation, ItemGroup, MutFlag } from "cdda-schema";
 import { DataManager } from 'cdda-event';
-import { getAnimMainMutID, getAnimTypeMutID } from './UtilGener';
+import { getAnimTypeMutID } from './UtilGener';
 import { JObject } from '@zwa73/utils';
 import { getOutAnimPath, getOutAnimPathAbs } from '@src/CMDefine';
 import { animeFlag } from '.';
+import { getAnimeMutID } from '@src/Export';
 
 
 
@@ -30,7 +31,7 @@ export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:An
     //动画变异标志
     const charAnimMut:Mutation={
         type:"mutation",
-        id:getAnimMainMutID(charName),
+        id:getAnimeMutID(charName),
         name:`${charName}的动画变异`,
         description:`${charName}动画变异标志`,
         restricts_gear  : [...BodyPartList],

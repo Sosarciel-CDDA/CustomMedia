@@ -3,6 +3,7 @@
     "@zwa73/utils": "^1.0.60",
     "cdda-event": "file:CDDA-Event",
     "cdda-schema": "file:CDDA-Schema",
+    "cdda-custommedia": "file:CDDA-CustomMedia",
     "commander": "^11.1.0",
     "tsc-alias": "^1.8.8",
     "typescript": "^5.3.3",
@@ -14,9 +15,9 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "build-schema": "node ./dist/BuildSchema.js",
+    "build-schema": "node buildSchema.js",
     "compile": "tsc && tsc-alias",
-    "build": "npm run compile && node --trace-warnings index"
+    "build": "npm run compile && node --trace-warnings build"
   },
   "repository": {
     "type": "git",

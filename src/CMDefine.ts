@@ -1,5 +1,5 @@
 import { UtilFT } from "@zwa73/utils";
-import { AnyCddaJsonList, ModDefine, Spell, SpellID } from "cdda-schema";
+import { AnyCddaJsonList, ModDefine, MutationID, Spell, SpellID } from "cdda-schema";
 import * as path from 'path';
 import * as fs from 'fs';
 /**mod物品前缀 */
@@ -62,3 +62,4 @@ export const getGfxPackName = async ()=>{
     gfxName = match[1];
     return gfxName;
 }
+

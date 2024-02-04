@@ -6,6 +6,7 @@ const cdda_schema_1 = require("cdda-schema");
 const UtilGener_1 = require("./UtilGener");
 const CMDefine_1 = require("../CMDefine");
 const _1 = require(".");
+const Export_1 = require("../Export");
 /**可用的动画类型列表 */
 exports.AnimTypeList = ["Idle", "Move", "Attack"];
 /**生成某角色的动作id */
@@ -23,7 +24,7 @@ async function createAnimTool(dm, charName, vaildAnim) {
     //动画变异标志
     const charAnimMut = {
         type: "mutation",
-        id: (0, UtilGener_1.getAnimMainMutID)(charName),
+        id: (0, Export_1.getAnimeMutID)(charName),
         name: `${charName}的动画变异`,
         description: `${charName}动画变异标志`,
         restricts_gear: [...cdda_schema_1.BodyPartList],
