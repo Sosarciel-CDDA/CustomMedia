@@ -2,7 +2,7 @@ import { JArray } from "@zwa73/utils";
 import { AnimType } from "./AnimTool";
 import { DataManager, CharHook } from "cdda-event";
 import * as path from 'path';
-import { Eoc } from "cdda-schema";
+import { Eoc, EocEffect } from "cdda-schema";
 import { CMDef, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
 import { getAnimTypeMutID } from "./UtilGener";
 import { getAnimeMutID } from "@src/Export";
@@ -45,10 +45,7 @@ function changeAnimEoc(charName:string,animType:AnimType,vaildAnim:AnimType[]){
             {run_eocs:removeEoc.id},
             {u_add_trait: getAnimTypeMutID(charName,animType) },
         ],
-        condition:{and:[
-            {u_has_trait: getAnimeMutID(charName)},
-            {not:{u_has_trait: getAnimTypeMutID(charName,animType)}}
-        ]}
+        condition:{not:{u_has_trait: getAnimTypeMutID(charName,animType)}}
     }
     return [eoc,removeEoc];
 }
@@ -64,8 +61,13 @@ export async function createAnimStatus(dm:DataManager,charName:string,vaildAnim:
             let eocs = changeAnimEoc(charName,animType,vaildAnim);
             eocList.push(...eocs);
             const eventName = animEventMap[animType];
-            if(eventName!=null && eocs!=null && eocs.length>0)
-                dm.addInvokeEoc(eventName,0,eocs[0]);
+            if(eventName!=null && eocs!=null && eocs.length>0){
+                const changeEffect:EocEffect={
+                    if:{u_has_trait: getAnimeMutID(charName)},
+                    then:[{run_eocs:[eocs[0]]}]
+                }
+                dm.addEvent(eventName,0,[changeEffect]);
+            }
         }
     }
     dm.addStaticData(eocList, path.join(getOutAnimPath(charName),'anime_status'));
