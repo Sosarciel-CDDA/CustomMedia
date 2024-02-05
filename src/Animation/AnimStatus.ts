@@ -70,5 +70,5 @@ export async function createAnimStatus(dm:DataManager,charName:string,vaildAnim:
             }
         }
     }
-    dm.addStaticData(eocList, path.join(getOutAnimPath(charName),'anime_status'));
+    dm.addData(eocList, path.join(getOutAnimPath(charName),'anime_status'));
 }

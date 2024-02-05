@@ -144,7 +144,7 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
         }),
     }
 
-    dm.addStaticData([imgModTileset],path.join(getOutImagePath(charName),"image_tileset"))
+    dm.addData([imgModTileset],path.join(getOutImagePath(charName),"image_tileset"))
 
     //复制所有图片 到输出目录
     const charImgPath = getOutImagePathAbs(charName);

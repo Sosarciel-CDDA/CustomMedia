@@ -53,6 +53,6 @@ async function createAnimTool(dm, charName, vaildAnim) {
         };
         out.push(animMut);
     }
-    dm.addStaticData(out, path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tool"));
+    dm.addData(out, path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tool"));
 }
 exports.createAnimTool = createAnimTool;

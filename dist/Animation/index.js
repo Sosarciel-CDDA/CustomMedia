@@ -127,5 +127,5 @@ function initAnimEvent(dm) {
         points: 0,
     };
     dm.addInvokeEoc("Init", 0, e);
-    dm.addStaticData([exports.animeFlag, e, BaseBodyOrdering, CnpcBaseBody], "anime_base");
+    dm.addData([exports.animeFlag, e, BaseBodyOrdering, CnpcBaseBody], "anime_base");
 }

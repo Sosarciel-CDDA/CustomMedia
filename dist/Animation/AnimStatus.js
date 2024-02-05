@@ -43,10 +43,7 @@ function changeAnimEoc(charName, animType, vaildAnim) {
             { run_eocs: removeEoc.id },
             { u_add_trait: (0, UtilGener_1.getAnimTypeMutID)(charName, animType) },
         ],
-        condition: { and: [
-                { u_has_trait: (0, Export_1.getAnimeMutID)(charName) },
-                { not: { u_has_trait: (0, UtilGener_1.getAnimTypeMutID)(charName, animType) } }
-            ] }
+        condition: { not: { u_has_trait: (0, UtilGener_1.getAnimTypeMutID)(charName, animType) } }
     };
     return [eoc, removeEoc];
 }
@@ -62,10 +59,15 @@ async function createAnimStatus(dm, charName, vaildAnim) {
             let eocs = changeAnimEoc(charName, animType, vaildAnim);
             eocList.push(...eocs);
             const eventName = animEventMap[animType];
-            if (eventName != null && eocs != null && eocs.length > 0)
-                dm.addInvokeEoc(eventName, 0, eocs[0]);
+            if (eventName != null && eocs != null && eocs.length > 0) {
+                const changeEffect = {
+                    if: { u_has_trait: (0, Export_1.getAnimeMutID)(charName) },
+                    then: [{ run_eocs: [eocs[0]] }]
+                };
+                dm.addEvent(eventName, 0, [changeEffect]);
+            }
         }
     }
-    dm.addStaticData(eocList, path.join((0, CMDefine_1.getOutAnimPath)(charName), 'anime_status'));
+    dm.addData(eocList, path.join((0, CMDefine_1.getOutAnimPath)(charName), 'anime_status'));
 }
 exports.createAnimStatus = createAnimStatus;

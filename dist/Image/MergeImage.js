@@ -122,7 +122,7 @@ async function mergeImage(dm, charName, forcePackage = true) {
             return item;
         }),
     };
-    dm.addStaticData([imgModTileset], path.join((0, CMDefine_1.getOutImagePath)(charName), "image_tileset"));
+    dm.addData([imgModTileset], path.join((0, CMDefine_1.getOutImagePath)(charName), "image_tileset"));
     //复制所有图片 到输出目录
     const charImgPath = (0, CMDefine_1.getOutImagePathAbs)(charName);
     await utils_1.UtilFT.ensurePathExists(charImgPath, true);

@@ -61,5 +61,5 @@ export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:An
         }
         out.push(animMut);
     }
-    dm.addStaticData(out,path.join(getOutAnimPath(charName),"anime_tool"));
+    dm.addData(out,path.join(getOutAnimPath(charName),"anime_tool"));
 }

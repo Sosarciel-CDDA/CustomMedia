@@ -149,7 +149,7 @@ export async function mergeAnime(dm:DataManager,charName:string,forcePackage:boo
             return item;
         }),
     }
-    dm.addStaticData([animModTileset,ordering], path.join(getOutAnimPath(charName),"anime_tileset"))
+    dm.addData([animModTileset,ordering], path.join(getOutAnimPath(charName),"anime_tileset"))
 
     //复制所有图片 到主目录
     const pngs = (await fs.promises.readdir(mergePath))

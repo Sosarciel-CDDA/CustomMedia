@@ -133,5 +133,5 @@ function initAnimEvent(dm:DataManager){
         points:0,
     }
     dm.addInvokeEoc("Init",0,e);
-    dm.addStaticData([animeFlag,e,BaseBodyOrdering,CnpcBaseBody],"anime_base");
+    dm.addData([animeFlag,e,BaseBodyOrdering,CnpcBaseBody],"anime_base");
 }

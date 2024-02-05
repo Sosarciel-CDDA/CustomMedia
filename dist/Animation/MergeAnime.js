@@ -118,7 +118,7 @@ async function mergeAnime(dm, charName, forcePackage = true) {
             return item;
         }),
     };
-    dm.addStaticData([animModTileset, ordering], path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tileset"));
+    dm.addData([animModTileset, ordering], path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tileset"));
     //复制所有图片 到主目录
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName => path.parse(fileName).ext == '.png');
