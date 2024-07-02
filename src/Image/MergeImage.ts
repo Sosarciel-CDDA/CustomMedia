@@ -82,7 +82,7 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
     const tileSetMap:Record<string,PkgTilesetCfg> = {};
 
     //寻找图像配置
-    const cfgFilepaths = UtilFT.fileSearchGlob(path.join(imagePath,"*.json").replace("\\","/"));
+    const cfgFilepaths = await UtilFT.fileSearchGlob(imagePath,"*.json");
     for(const cfgPath of cfgFilepaths){
         const cfgJson:ImageInfo = (await UtilFT.loadJSONFile(cfgPath)) as ImageInfo;
         const tilesetcfg = cfgJson.tileset;
@@ -94,7 +94,7 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
         const uid = getTilesetUID(tilesetcfg);
         const tmpFolderPath = path.join(rawPath,`pngs_${uid}_${wxh}`);
 
-        await UtilFT.ensurePathExists(tmpFolderPath,true);
+        await UtilFT.ensurePathExists(tmpFolderPath,{dir:true});
         //复制png到缓存
         for(let pngName of pngs){
             pngName = pngName+".png";
@@ -128,12 +128,12 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
                 `TILESET: tiles.png`      ;
     await fs.promises.writeFile(path.join(rawPath,'tileset.txt'), str);
     //开始打包
-    await UtilFT.ensurePathExists(mergePath,true);
+    await UtilFT.ensurePathExists(mergePath,{dir:true});
     await UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
 
     //读取打包结果
     const packageInfoPath = path.join(mergePath,'tile_config.json');
-    const tilesetNew = ((await UtilFT.loadJSONFile(packageInfoPath))["tiles-new"] as TilesetCfg[])
+    const tilesetNew = (((await UtilFT.loadJSONFile(packageInfoPath))as any )["tiles-new"]! as TilesetCfg[])
         .filter(item => item.file!="fallback.png");
     const imgModTileset:ModTileset = {
         type: "mod_tileset",
@@ -148,7 +148,7 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
 
     //复制所有图片 到输出目录
     const charImgPath = getOutImagePathAbs(charName);
-    await UtilFT.ensurePathExists(charImgPath,true);
+    await UtilFT.ensurePathExists(charImgPath,{dir:true});
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName=> path.parse(fileName).ext=='.png');
     for(let pngName of pngs){

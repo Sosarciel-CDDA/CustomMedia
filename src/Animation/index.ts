@@ -4,9 +4,8 @@ import { mergeAnime } from "./MergeAnime";
 import { createAnimTool } from "./AnimTool";
 import { createAnimStatus } from "./AnimStatus";
 import { CMDef, GAME_PATH, TARGET_GFXPACK, getGfxPackName } from "@src/CMDefine";
-import * as fs from 'fs';
 import * as path from 'path';
-import { JObject, UtilFT } from "@zwa73/utils";
+import { UtilFT } from "@zwa73/utils";
 
 /**基础素体变异ID */
 export const BaseBodyMutId = "BaseBody" as MutationID;
@@ -26,7 +25,7 @@ export async function initAnimation(dm:DataManager){
     //读取贴图包设置备份 无则创建
     let tileConfig:Record<string,any>;
     if((await UtilFT.pathExists(path.join(gfxPath,'tile_config.json'))))
-        tileConfig = await UtilFT.loadJSONFile(path.join(gfxPath,'tile_config.json'));
+        tileConfig = await UtilFT.loadJSONFile(path.join(gfxPath,'tile_config.json')) as Record<string,any>;
     else throw ("未找到贴图包 tile_config.json");
     //记录默认数据
     const defSet = tileConfig.tile_info[0];

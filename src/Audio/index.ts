@@ -22,7 +22,7 @@ export async function processSoundpack(dm:DataManager,charName:string){
 
     //确认输出文件夹
     const outAudioPath = getOutAudioPathAbs(charName);
-    await UtilFT.ensurePathExists(outAudioPath,true);
+    await UtilFT.ensurePathExists(outAudioPath,{dir:true});
 
     //遍历并找出所有音效文件夹
     const inAudioPath = getAudioPath(charName);
