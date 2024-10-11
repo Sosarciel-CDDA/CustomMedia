@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createAnimStatus = createAnimStatus;
-const path = require("path");
+const pathe_1 = __importDefault(require("pathe"));
 const CMDefine_1 = require("../CMDefine");
 const UtilGener_1 = require("./UtilGener");
 const Export_1 = require("../Export");
@@ -68,5 +71,5 @@ async function createAnimStatus(dm, charName, vaildAnim) {
             }
         }
     }
-    dm.addData(eocList, path.join((0, CMDefine_1.getOutAnimPath)(charName), 'anime_status'));
+    dm.addData(eocList, pathe_1.default.join((0, CMDefine_1.getOutAnimPath)(charName), 'anime_status'));
 }

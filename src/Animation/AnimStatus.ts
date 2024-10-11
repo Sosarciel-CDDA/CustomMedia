@@ -1,7 +1,6 @@
-import { JArray } from "@zwa73/utils";
 import { AnimType } from "./AnimTool";
 import { DataManager, CharHook } from "cdda-event";
-import * as path from 'path';
+import path from 'pathe';
 import { Eoc, EocEffect } from "cdda-schema";
 import { CMDef, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
 import { getAnimTypeMutID } from "./UtilGener";

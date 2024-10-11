@@ -1,9 +1,9 @@
 import * as path from 'path';
-import { Armor, BodyPartList, Mutation, ItemGroup, MutFlag } from "cdda-schema";
+import { Mutation, MutFlag, Generic, Monster } from "cdda-schema";
 import { DataManager } from 'cdda-event';
-import { getAnimTypeMutID } from './UtilGener';
+import { getAnimTypeItemID, getAnimTypeMonID, getAnimTypeMutID } from './UtilGener';
 import { JObject } from '@zwa73/utils';
-import { getOutAnimPath, getOutAnimPathAbs } from '@src/CMDefine';
+import { getOutAnimPath } from '@src/CMDefine';
 import { animeFlag } from '.';
 import { getAnimeMutID } from '@src/Export';
 
@@ -34,8 +34,6 @@ export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:An
         id:getAnimeMutID(charName),
         name:`${charName}的动画变异`,
         description:`${charName}动画变异标志`,
-        restricts_gear  : [...BodyPartList],
-        remove_rigid    : [...BodyPartList],
         points:0,
         purifiable:false,
         valid:false,
@@ -44,22 +42,36 @@ export async function createAnimTool(dm:DataManager,charName:string,vaildAnim:An
     }
     out.push(charAnimMut);
 
-    //动画变异
     for(const animType of vaildAnim){
+        //动画变异
         const animMut:Mutation={
             type:"mutation",
             id:getAnimTypeMutID(charName,animType),
             name:`${charName}的${animType}动画变异`,
             description:`${charName}的${animType}动画变异`,
-            //integrated_armor:[animData.armorID],
-            restricts_gear  : [...BodyPartList],
-            remove_rigid    : [...BodyPartList],
             points:0,
             purifiable:false,
             valid:false,
             player_display:false,
+            override_look:{
+                tile_category:'monster',
+                id:getAnimTypeMonID(charName,animType),
+            }
         }
-        out.push(animMut);
+        //动画物品
+        const animMon:Monster={
+            id:getAnimTypeMonID(charName,animType),
+            type:'MONSTER',
+            name:`${charName}的${animType}动画图片怪物`,
+            description:`${charName}的${animType}动画图片怪物`,
+            symbol:'o',
+            hp:1,
+            volume:1,
+            weight:1,
+            default_faction:'human',
+            speed:1,
+        }
+        out.push(animMut,animMon);
     }
     dm.addData(out,path.join(getOutAnimPath(charName),"anime_tool"));
 }

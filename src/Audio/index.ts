@@ -2,8 +2,8 @@ import { OUT_SOUND_PATH, getAudioPath, getOutAnimPathAbs, getOutAudioPathAbs } f
 import { UtilFT } from "@zwa73/utils";
 import { DataManager } from "cdda-event";
 import { SoundEffect, SoundEffectID, SoundEffectVariantID } from "cdda-schema";
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'pathe';
 
 
 const defineList = [

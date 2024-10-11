@@ -1,8 +1,31 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mergeAnime = mergeAnime;
-const path = require("path");
-const fs = require("fs");
+const path = __importStar(require("path"));
+const fs = __importStar(require("fs"));
 const utils_1 = require("@zwa73/utils");
 const CMDefine_1 = require("../CMDefine");
 const UtilGener_1 = require("./UtilGener");
@@ -28,10 +51,10 @@ async function mergeAnime(dm, charName, forcePackage = true) {
             pixelscale: 1 //  Optional. Sets a multiplier for resizing a tileset. Defaults to 1.
         }];
     //显示层级
-    const ordering = {
-        type: "overlay_order",
-        overlay_ordering: []
-    };
+    //const ordering:OverlayOrdering={
+    //    type: "overlay_order",
+    //    overlay_ordering: []
+    //};
     //处理动作
     //删除缓存
     if (forcePackage)
@@ -75,8 +98,7 @@ async function mergeAnime(dm, charName, forcePackage = true) {
             animages[animages.length - 1].weight = last_weight;
         //写入动画数据
         await utils_1.UtilFT.writeJSONFile(path.join(tmpMthPath, uid), {
-            //id:`overlay_worn_${animData.armorID}`,
-            id: `overlay_mutation_${(0, UtilGener_1.getAnimTypeMutID)(charName, animType)}`,
+            id: `${(0, UtilGener_1.getAnimTypeMonID)(charName, animType)}`,
             fg: animages,
             animated: true,
         });
@@ -85,11 +107,6 @@ async function mergeAnime(dm, charName, forcePackage = true) {
             [uid + '.png']: {
                 ...rest
             }
-        });
-        //添加显示层级
-        ordering.overlay_ordering.push({
-            id: [(0, UtilGener_1.getAnimTypeMutID)(charName, animType)],
-            order: 9999
         });
     }
     //创建info
@@ -118,7 +135,8 @@ async function mergeAnime(dm, charName, forcePackage = true) {
             return item;
         }),
     };
-    dm.addData([animModTileset, ordering], path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tileset"));
+    //dm.addData([animModTileset,ordering], path.join(getOutAnimPath(charName),"anime_tileset"))
+    dm.addData([animModTileset], path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tileset"));
     //复制所有图片 到主目录
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName => path.parse(fileName).ext == '.png');
