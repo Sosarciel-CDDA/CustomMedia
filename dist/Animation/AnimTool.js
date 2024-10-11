@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAnimTool = exports.formatAnimName = exports.AnimTypeList = void 0;
+exports.AnimTypeList = void 0;
+exports.formatAnimName = formatAnimName;
+exports.createAnimTool = createAnimTool;
 const path = require("path");
 const cdda_schema_1 = require("cdda-schema");
 const UtilGener_1 = require("./UtilGener");
@@ -13,7 +15,6 @@ exports.AnimTypeList = ["Idle", "Move", "Attack"];
 function formatAnimName(charName, animType) {
     return `${charName}${animType}`;
 }
-exports.formatAnimName = formatAnimName;
 /**创建动画辅助工具
  * @param charName 角色名
  */
@@ -55,4 +56,3 @@ async function createAnimTool(dm, charName, vaildAnim) {
     }
     dm.addData(out, path.join((0, CMDefine_1.getOutAnimPath)(charName), "anime_tool"));
 }
-exports.createAnimTool = createAnimTool;

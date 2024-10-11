@@ -6,7 +6,7 @@ const cdda_schema_1 = require("cdda-schema");
 const path = require("path");
 const fs = require("fs");
 /**mod物品前缀 */
-exports.MOD_PREFIX = "CMEDiA";
+exports.MOD_PREFIX = "CMEDIA";
 exports.CMDef = new cdda_schema_1.ModDefine(exports.MOD_PREFIX);
 /**data文件夹路径 */
 exports.DATA_PATH = path.join(process.cwd(), 'data');

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.build = void 0;
+exports.build = build;
 const cdda_event_1 = require("cdda-event");
 const CMDefine_1 = require("./CMDefine");
 const Animation_1 = require("./Animation");
@@ -21,4 +21,3 @@ async function build() {
     await Promise.all(plist);
     await CMDm.saveAllData();
 }
-exports.build = build;

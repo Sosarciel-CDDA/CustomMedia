@@ -129,7 +129,7 @@ export async function mergeImage(dm:DataManager,charName:string,forcePackage:boo
     await fs.promises.writeFile(path.join(rawPath,'tileset.txt'), str);
     //开始打包
     await UtilFT.ensurePathExists(mergePath,{dir:true});
-    await UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
+    await UtilFunc.exec(`python "tools/compose.py" "${rawPath}" "${mergePath}"`);
 
     //读取打包结果
     const packageInfoPath = path.join(mergePath,'tile_config.json');

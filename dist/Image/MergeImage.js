@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mergeImage = void 0;
+exports.mergeImage = mergeImage;
 const path = require("path");
 const fs = require("fs");
 const utils_1 = require("@zwa73/utils");
@@ -67,7 +67,7 @@ async function mergeImage(dm, charName, forcePackage = true) {
     /**用于输出的图集表 */
     const tileSetMap = {};
     //寻找图像配置
-    const cfgFilepaths = utils_1.UtilFT.fileSearchGlob(path.join(imagePath, "*.json").replace("\\", "/"));
+    const cfgFilepaths = await utils_1.UtilFT.fileSearchGlob(imagePath, "*.json");
     for (const cfgPath of cfgFilepaths) {
         const cfgJson = (await utils_1.UtilFT.loadJSONFile(cfgPath));
         const tilesetcfg = cfgJson.tileset;
@@ -77,7 +77,7 @@ async function mergeImage(dm, charName, forcePackage = true) {
         const wxh = tilesetcfg.sprite_width + "x" + tilesetcfg.sprite_height;
         const uid = getTilesetUID(tilesetcfg);
         const tmpFolderPath = path.join(rawPath, `pngs_${uid}_${wxh}`);
-        await utils_1.UtilFT.ensurePathExists(tmpFolderPath, true);
+        await utils_1.UtilFT.ensurePathExists(tmpFolderPath, { dir: true });
         //复制png到缓存
         for (let pngName of pngs) {
             pngName = pngName + ".png";
@@ -108,8 +108,8 @@ async function mergeImage(dm, charName, forcePackage = true) {
         `TILESET: tiles.png`;
     await fs.promises.writeFile(path.join(rawPath, 'tileset.txt'), str);
     //开始打包
-    await utils_1.UtilFT.ensurePathExists(mergePath, true);
-    await utils_1.UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
+    await utils_1.UtilFT.ensurePathExists(mergePath, { dir: true });
+    await utils_1.UtilFunc.exec(`python "tools/compose.py" "${rawPath}" "${mergePath}"`);
     //读取打包结果
     const packageInfoPath = path.join(mergePath, 'tile_config.json');
     const tilesetNew = (await utils_1.UtilFT.loadJSONFile(packageInfoPath))["tiles-new"]
@@ -125,7 +125,7 @@ async function mergeImage(dm, charName, forcePackage = true) {
     dm.addData([imgModTileset], path.join((0, CMDefine_1.getOutImagePath)(charName), "image_tileset"));
     //复制所有图片 到输出目录
     const charImgPath = (0, CMDefine_1.getOutImagePathAbs)(charName);
-    await utils_1.UtilFT.ensurePathExists(charImgPath, true);
+    await utils_1.UtilFT.ensurePathExists(charImgPath, { dir: true });
     const pngs = (await fs.promises.readdir(mergePath))
         .filter(fileName => path.parse(fileName).ext == '.png');
     for (let pngName of pngs) {
@@ -134,4 +134,3 @@ async function mergeImage(dm, charName, forcePackage = true) {
         await fs.promises.copyFile(pngPath, outPngPath);
     }
 }
-exports.mergeImage = mergeImage;

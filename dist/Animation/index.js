@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.animeFlag = exports.initAnimation = exports.processAnimation = exports.BaseBodyMutId = void 0;
+exports.animeFlag = exports.BaseBodyMutId = void 0;
+exports.processAnimation = processAnimation;
+exports.initAnimation = initAnimation;
 const MergeAnime_1 = require("./MergeAnime");
 const AnimTool_1 = require("./AnimTool");
 const AnimStatus_1 = require("./AnimStatus");
@@ -14,7 +16,6 @@ async function processAnimation(dm, charName) {
     await (0, AnimTool_1.createAnimTool)(dm, charName, validAnim);
     await (0, AnimStatus_1.createAnimStatus)(dm, charName, validAnim);
 }
-exports.processAnimation = processAnimation;
 /**初始化贴图包设置 */
 async function initAnimation(dm) {
     //处理贴图包
@@ -100,7 +101,6 @@ async function initAnimation(dm) {
         }]);
     initAnimEvent(dm);
 }
-exports.initAnimation = initAnimation;
 exports.animeFlag = {
     id: "has_anime",
     type: "json_flag",

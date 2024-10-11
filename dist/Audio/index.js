@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processSoundpack = void 0;
+exports.processSoundpack = processSoundpack;
 const CMDefine_1 = require("../CMDefine");
 const utils_1 = require("@zwa73/utils");
 const fs = require("fs");
@@ -19,7 +19,7 @@ async function processSoundpack(dm, charName) {
     await fs.promises.rm((0, CMDefine_1.getOutAudioPathAbs)(charName), { recursive: true, force: true });
     //确认输出文件夹
     const outAudioPath = (0, CMDefine_1.getOutAudioPathAbs)(charName);
-    await utils_1.UtilFT.ensurePathExists(outAudioPath, true);
+    await utils_1.UtilFT.ensurePathExists(outAudioPath, { dir: true });
     //遍历并找出所有音效文件夹
     const inAudioPath = (0, CMDefine_1.getAudioPath)(charName);
     if (!(await utils_1.UtilFT.pathExists(inAudioPath)))
@@ -53,4 +53,3 @@ async function processSoundpack(dm, charName) {
         await utils_1.UtilFT.writeJSONFile(path.join(outPath, inDirPath), [se]);
     }
 }
-exports.processSoundpack = processSoundpack;

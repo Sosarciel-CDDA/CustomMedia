@@ -1,6 +1,6 @@
 import { ModDefine } from "cdda-schema";
 /**mod物品前缀 */
-export declare const MOD_PREFIX = "CMEDiA";
+export declare const MOD_PREFIX = "CMEDIA";
 export declare const CMDef: ModDefine;
 /**data文件夹路径 */
 export declare const DATA_PATH: string;

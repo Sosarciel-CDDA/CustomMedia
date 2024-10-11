@@ -3,7 +3,7 @@ import { AnyCddaJsonList, ModDefine, MutationID, Spell, SpellID } from "cdda-sch
 import * as path from 'path';
 import * as fs from 'fs';
 /**mod物品前缀 */
-export const MOD_PREFIX = "CMEDiA";
+export const MOD_PREFIX = "CMEDIA";
 
 export const CMDef = new ModDefine(MOD_PREFIX);
 
@@ -14,7 +14,7 @@ export const MEDIA_PATH = path.join(DATA_PATH,'Media');
 /**sosarcielEnv文件夹路径 */
 export const ENV_PATH = path.join(process.cwd(),'..');
 /**build设定 */
-const BuilfSetting = UtilFT.loadJSONFileSync(path.join(ENV_PATH,'build_setting.json'));
+const BuilfSetting = UtilFT.loadJSONFileSync(path.join(ENV_PATH,'build_setting.json')) as any;
 /**build目标游戏路径 */
 export const GAME_PATH = BuilfSetting.game_path as string;
 /**build目标贴图包 */

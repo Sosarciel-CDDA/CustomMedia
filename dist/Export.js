@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAudioEffect = exports.getAnimeMutID = void 0;
+exports.getAnimeMutID = void 0;
+exports.getAudioEffect = getAudioEffect;
 /**获取动画变异ID */
 const getAnimeMutID = (charName) => `${charName}_anime`;
 exports.getAnimeMutID = getAnimeMutID;
@@ -21,4 +22,3 @@ function getAudioEffect(charName, str, volume = 100) {
         volume
     };
 }
-exports.getAudioEffect = getAudioEffect;

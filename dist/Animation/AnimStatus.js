@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAnimStatus = void 0;
+exports.createAnimStatus = createAnimStatus;
 const path = require("path");
 const CMDefine_1 = require("../CMDefine");
 const UtilGener_1 = require("./UtilGener");
@@ -62,7 +62,7 @@ async function createAnimStatus(dm, charName, vaildAnim) {
             if (eventName != null && eocs != null && eocs.length > 0) {
                 const changeEffect = {
                     if: { u_has_trait: (0, Export_1.getAnimeMutID)(charName) },
-                    then: [{ run_eocs: [eocs[0]] }]
+                    then: [{ run_eocs: [eocs[0].id] }]
                 };
                 dm.addEvent(eventName, 0, [changeEffect]);
             }
@@ -70,4 +70,3 @@ async function createAnimStatus(dm, charName, vaildAnim) {
     }
     dm.addData(eocList, path.join((0, CMDefine_1.getOutAnimPath)(charName), 'anime_status'));
 }
-exports.createAnimStatus = createAnimStatus;

@@ -64,7 +64,7 @@ export async function createAnimStatus(dm:DataManager,charName:string,vaildAnim:
             if(eventName!=null && eocs!=null && eocs.length>0){
                 const changeEffect:EocEffect={
                     if:{u_has_trait: getAnimeMutID(charName)},
-                    then:[{run_eocs:[eocs[0]]}]
+                    then:[{run_eocs:[eocs[0].id]}]
                 }
                 dm.addEvent(eventName,0,[changeEffect]);
             }

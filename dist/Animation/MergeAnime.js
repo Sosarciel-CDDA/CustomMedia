@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mergeAnime = void 0;
+exports.mergeAnime = mergeAnime;
 const path = require("path");
 const fs = require("fs");
 const utils_1 = require("@zwa73/utils");
@@ -53,7 +53,7 @@ async function mergeAnime(dm, charName, forcePackage = true) {
         const wxh = `${mtnInfo.sprite_width}x${mtnInfo.sprite_height}`;
         const uid = (charName + animType).replaceAll("_", "");
         const tmpMthPath = path.join(rawPath, `pngs_${uid}_${wxh}`);
-        await utils_1.UtilFT.ensurePathExists(tmpMthPath, true);
+        await utils_1.UtilFT.ensurePathExists(tmpMthPath, { dir: true });
         //复制数据到缓存
         if (needPackage)
             await fs.promises.cp(mtnPath, tmpMthPath, { recursive: true });
@@ -100,14 +100,14 @@ async function mergeAnime(dm, charName, forcePackage = true) {
         `TILESET: tiles.png`;
     await fs.promises.writeFile(path.join(rawPath, 'tileset.txt'), str);
     //打包
-    await utils_1.UtilFT.ensurePathExists(mergePath, true);
+    await utils_1.UtilFT.ensurePathExists(mergePath, { dir: true });
     const packageInfoPath = path.join(mergePath, 'tile_config.json');
     //如果不存在目标info文件或强制打包则进行打包
     if (needPackage)
-        await utils_1.UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
+        await utils_1.UtilFunc.exec(`python "tools/compose.py" "${rawPath}" "${mergePath}"`);
     //写入 mod贴图设置 到角色文件夹
     const charAnimPath = (0, CMDefine_1.getOutAnimPathAbs)(charName);
-    await utils_1.UtilFT.ensurePathExists(charAnimPath, true);
+    await utils_1.UtilFT.ensurePathExists(charAnimPath, { dir: true });
     const tilesetNew = (await utils_1.UtilFT.loadJSONFile(packageInfoPath))["tiles-new"]
         .filter(item => item.file != "fallback.png");
     const animModTileset = {
@@ -129,4 +129,3 @@ async function mergeAnime(dm, charName, forcePackage = true) {
     }
     return validAnim;
 }
-exports.mergeAnime = mergeAnime;

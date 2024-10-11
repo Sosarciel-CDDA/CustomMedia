@@ -81,7 +81,7 @@ export async function mergeAnime(dm:DataManager,charName:string,forcePackage:boo
         const wxh = `${mtnInfo.sprite_width}x${mtnInfo.sprite_height}`;
         const uid = (charName+animType).replaceAll("_","");
         const tmpMthPath = path.join(rawPath, `pngs_${uid}_${wxh}`);
-        await UtilFT.ensurePathExists(tmpMthPath,true);
+        await UtilFT.ensurePathExists(tmpMthPath,{dir:true});
 
         //复制数据到缓存
         if(needPackage)
@@ -130,16 +130,16 @@ export async function mergeAnime(dm:DataManager,charName:string,forcePackage:boo
                 `TILESET: tiles.png`      ;
     await fs.promises.writeFile(path.join(rawPath,'tileset.txt'), str);
     //打包
-    await UtilFT.ensurePathExists(mergePath,true);
+    await UtilFT.ensurePathExists(mergePath,{dir:true});
     const packageInfoPath = path.join(mergePath,'tile_config.json');
     //如果不存在目标info文件或强制打包则进行打包
     if(needPackage)
-        await UtilFunc.exec(`py "tools/compose.py" "${rawPath}" "${mergePath}"`);
+        await UtilFunc.exec(`python "tools/compose.py" "${rawPath}" "${mergePath}"`);
 
     //写入 mod贴图设置 到角色文件夹
     const charAnimPath = getOutAnimPathAbs(charName);
-    await UtilFT.ensurePathExists(charAnimPath,true);
-    const tilesetNew = ((await UtilFT.loadJSONFile(packageInfoPath))["tiles-new"] as TilesetCfg[])
+    await UtilFT.ensurePathExists(charAnimPath,{dir:true});
+    const tilesetNew = ((await UtilFT.loadJSONFile(packageInfoPath) as any)["tiles-new"] as TilesetCfg[])
         .filter(item => item.file!="fallback.png");
     const animModTileset:ModTileset = {
         type: "mod_tileset",
