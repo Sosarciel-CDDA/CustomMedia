@@ -1,4 +1,4 @@
-import { DataManager } from "cdda-event";
+import { DataManager } from "@sosarciel-cdda/cdda-event";
 import { DATA_PATH, MEDIA_PATH, OUT_PATH } from "./CMDefine";
 import { initAnimation, processAnimation } from "./Animation";
 import { processSoundpack } from "./Audio";

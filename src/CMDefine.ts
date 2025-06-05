@@ -1,5 +1,5 @@
 import { UtilFT } from "@zwa73/utils";
-import { AnyCddaJsonList, ModDefine, MutationID, Spell, SpellID } from "cdda-schema";
+import { AnyCddaJsonList, ModDefine, MutationID, Spell, SpellID } from "@sosarciel-cdda/cdda-schema";
 import * as path from 'path';
 import * as fs from 'fs';
 /**mod物品前缀 */

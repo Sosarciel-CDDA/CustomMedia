@@ -1,4 +1,4 @@
-import { MutationID, SoundEffectID, SoundEffectVariantID } from "cdda-schema";
+import { MutationID, SoundEffectID, SoundEffectVariantID } from "@sosarciel-cdda/cdda-schema";
 
 
 
