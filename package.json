@@ -1,14 +1,13 @@
 {
   "dependencies": {
-    "@zwa73/utils": "^1.0.60",
-    "cdda-event": "file:../CDDA-Event",
-    "cdda-schema": "file:../CDDA-Schema"
+    "@sosarciel-cdda/cdda-event": "^1.0.0",
+    "@sosarciel-cdda/cdda-schema": "^1.0.0",
+    "@zwa73/utils": "^1.0.60"
   },
-  "name": "cdda-custommedia",
+  "name": "@sosarciel-cdda/cdda-custommedia",
   "description": "CDDA-CustomMedia",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "build-schema": "node buildSchema.js",
     "compile": "tsc && tsc-alias",
