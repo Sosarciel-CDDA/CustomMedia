@@ -1,7 +1,7 @@
 import { OUT_SOUND_PATH, getAudioPath, getOutAnimPathAbs, getOutAudioPathAbs } from "@src/CMDefine";
 import { UtilFT } from "@zwa73/utils";
 import { DataManager } from "cdda-event";
-import { SoundEffect, SoundEffectID, SoundEffectVariantID } from "cdda-schema";
+import { SoundEffect, SoundEffectID, SoundEffectVariantID } from "@sosarciel-cdda/sclema";
 import fs from 'fs';
 import path from 'pathe';
 
