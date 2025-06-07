@@ -1,7 +1,7 @@
 import { AnimType } from "./AnimTool";
-import { DataManager, CharHook } from "cdda-event";
+import { DataManager, CharHook } from "@sosarciel-cdda/event";
 import path from 'pathe';
-import { Eoc, EocEffect } from "@sosarciel-cdda/sclema";
+import { Eoc, EocEffect } from "@sosarciel-cdda/schema";
 import { CMDef, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
 import { getAnimTypeMutID } from "./UtilGener";
 import { getAnimeMutID } from "@src/Export";

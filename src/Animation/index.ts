@@ -1,5 +1,5 @@
-import { DataManager } from "cdda-event";
-import { Flag, FlagID } from "@sosarciel-cdda/sclema";
+import { DataManager } from "@sosarciel-cdda/event";
+import { Flag, FlagID } from "@sosarciel-cdda/schema";
 import { mergeAnime } from "./MergeAnime";
 import { createAnimTool } from "./AnimTool";
 import { createAnimStatus } from "./AnimStatus";

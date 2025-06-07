@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Mutation, MutFlag, Generic, Monster } from "@sosarciel-cdda/sclema";
+import { Mutation, MutFlag, Generic, Monster } from "@sosarciel-cdda/schema";
 import { DataManager } from 'cdda-event';
 import { getAnimTypeItemID, getAnimTypeMonID, getAnimTypeMutID } from './UtilGener';
 import { JObject } from '@zwa73/utils';

@@ -2,9 +2,9 @@ import * as path from "path";
 import * as fs from "fs";
 import { UtilFT, UtilFunc } from "@zwa73/utils";
 import { AnimType } from "./AnimTool";
-import { PkgTilesetInfo, TilesetCfg, ModTileset } from "@sosarciel-cdda/sclema";
+import { PkgTilesetInfo, TilesetCfg, ModTileset } from "@sosarciel-cdda/schema";
 import { getAnimPath, getGfxPackName, getOutAnimPath, getOutAnimPathAbs } from "@src/CMDefine";
-import { DataManager } from "cdda-event";
+import { DataManager } from "@sosarciel-cdda/event";
 import { getAnimTypeMonID } from "./UtilGener";
 
 

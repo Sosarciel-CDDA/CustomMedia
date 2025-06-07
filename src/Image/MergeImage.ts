@@ -1,9 +1,9 @@
 import * as path from "path";
 import * as fs from "fs";
 import { UtilFT, UtilFunc } from "@zwa73/utils";
-import { PkgImageCfg, PkgSpriteCfg, PkgTilesetCfg, PkgTilesetInfo, TilesetCfg } from "@sosarciel-cdda/sclema";
-import { ModTileset } from "@sosarciel-cdda/sclema";
-import { DataManager } from "cdda-event";
+import { PkgImageCfg, PkgSpriteCfg, PkgTilesetCfg, PkgTilesetInfo, TilesetCfg } from "@sosarciel-cdda/schema";
+import { ModTileset } from "@sosarciel-cdda/schema";
+import { DataManager } from "@sosarciel-cdda/event";
 import { TARGET_GFXPACK, getAnimPath, getGfxPackName, getImagePath, getOutImagePath, getOutImagePathAbs } from "@src/CMDefine";
 
 
